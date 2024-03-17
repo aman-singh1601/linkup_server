@@ -13,6 +13,7 @@ io.on("connection", (socket) => {
 
         socketToEmailMapping.set(socket.id, email);
         emailToSocketMapping.set(email, socket.id);
+        
         socket.join(roomid);
         
         //telling user that a room has been created 
@@ -23,7 +24,7 @@ io.on("connection", (socket) => {
     })
       //taking the call
     socket.on("event:call-user", ({email, offer}) => {
-    console.log("email: " + email  + " offer: " + offer);
+
     const fromEmail = socketToEmailMapping.get(socket.id);
     const toSocketId = emailToSocketMapping.get(email);
 
@@ -31,9 +32,10 @@ io.on("connection", (socket) => {
 
     });
     socket.on("event:call-accepted", ({email, ans}) => {
-        // console.log("call-accepted:", email);
+
         const fromEmail = socketToEmailMapping.get(socket.id);
         const toSocketId = emailToSocketMapping.get(email);
+
         socket.to(toSocketId).emit("event:accepted", {email: fromEmail, ans});
     });
 })
